@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { 
-  Search, 
   PlusCircle, 
-  MapPin, 
   User, 
   LogOut, 
   Menu, 
   X, 
-  ArrowUpRight,
-  ShieldCheck,
-  Compass
+  ArrowUpRight
 } from 'lucide-react';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isActive = (path) => location.pathname === path;
@@ -25,9 +22,15 @@ export default function Navbar() {
     { label: 'Overview', path: '/' },
     { label: 'Lost Items', path: '/lost-items' },
     { label: 'Found Items', path: '/found-items' },
-    { label: 'Report Lost', path: '/report-lost' },
-    { label: 'Report Found', path: '/report-found' }
   ];
+
+  const handleReportItem = () => {
+    if (user) {
+      navigate('/report-lost');
+    } else {
+      navigate('/login');
+    }
+  };
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-[#d0d7de]">
@@ -100,11 +103,17 @@ export default function Navbar() {
                   isActive('/profile') ? 'bg-[#f6f8fa] font-semibold' : ''
                 }`}
               >
-                <img
-                  src={user.avatar}
-                  alt={user.name}
-                  className="w-7 h-7 rounded-full object-cover border border-[#d0d7de]"
-                />
+                {user.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt={user.name}
+                    className="w-7 h-7 rounded-full object-cover border border-[#d0d7de]"
+                  />
+                ) : (
+                  <div className="w-7 h-7 rounded-full bg-[#1f2328] text-white flex items-center justify-center text-xs font-bold border border-[#d0d7de]">
+                    {user.name?.charAt(0)?.toUpperCase() || 'U'}
+                  </div>
+                )}
                 <div className="hidden sm:flex flex-col text-left">
                   <span className="text-xs font-semibold text-[#1f2328] leading-tight">
                     {user.name.split(' ')[0]}
@@ -124,23 +133,35 @@ export default function Navbar() {
               </button>
             </div>
           ) : (
-            <Link
-              to="/login"
-              className="flex items-center gap-2 px-4 md:px-5 border-l border-[#d0d7de] text-sm font-medium text-[#1f2328] hover:bg-[#f6f8fa] transition-colors"
-            >
-              <User className="w-4 h-4 text-[#59636e]" />
-              <span>Sign in</span>
-            </Link>
+            <div className="hidden lg:flex items-stretch">
+              <Link
+                to="/login"
+                className={`flex items-center gap-2 px-4 md:px-5 border-l border-[#d0d7de] text-sm font-medium text-[#1f2328] hover:bg-[#f6f8fa] transition-colors ${
+                  isActive('/login') ? 'bg-[#f6f8fa] font-semibold' : ''
+                }`}
+              >
+                <User className="w-4 h-4 text-[#59636e]" />
+                <span>Sign in</span>
+              </Link>
+              <Link
+                to="/register"
+                className={`flex items-center gap-2 px-4 md:px-5 border-l border-[#d0d7de] text-sm font-medium text-[#1f2328] hover:bg-[#f6f8fa] transition-colors ${
+                  isActive('/register') ? 'bg-[#f6f8fa] font-semibold' : ''
+                }`}
+              >
+                <span>Register</span>
+              </Link>
+            </div>
           )}
 
-          {/* Universe '26 Signature Green CTA Button */}
-          <Link
-            to="/report-lost"
+          {/* Green CTA — redirects to /login if unauthenticated */}
+          <button
+            onClick={handleReportItem}
             className="flex items-center justify-center gap-2 px-5 md:px-7 bg-[#238636] hover:bg-[#2ea44f] text-white font-semibold text-sm tracking-wide transition-all border-l border-[#238636] group"
           >
             <span>Report Item</span>
             <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </Link>
+          </button>
 
           {/* Mobile hamburger menu button */}
           <button
@@ -182,7 +203,13 @@ export default function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-2 text-sm font-medium text-[#1f2328]"
                 >
-                  <img src={user.avatar} className="w-6 h-6 rounded-full" alt="" />
+                  {user.avatar ? (
+                    <img src={user.avatar} className="w-6 h-6 rounded-full object-cover" alt="" />
+                  ) : (
+                    <div className="w-6 h-6 rounded-full bg-[#1f2328] text-white flex items-center justify-center text-xs font-bold">
+                      {user.name?.charAt(0)?.toUpperCase() || 'U'}
+                    </div>
+                  )}
                   <span>My Profile ({user.name})</span>
                 </Link>
                 <button

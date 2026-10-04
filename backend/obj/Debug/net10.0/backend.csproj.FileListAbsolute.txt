@@ -1,3 +1,12 @@
+D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\backend.csproj.AssemblyReference.cache
+D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\rpswa.dswa.cache.json
+D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\backend.GeneratedMSBuildEditorConfig.editorconfig
+D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\backend.AssemblyInfoInputs.cache
+D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\backend.AssemblyInfo.cs
+D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\backend.csproj.CoreCompileInputs.cache
+D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\backend.MvcApplicationPartsAssemblyInfo.cs
+D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\backend.MvcApplicationPartsAssemblyInfo.cache
+D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\backend.sourcelink.json
 D:\github\CampusFind-Lost-Found-Portal\backend\bin\Debug\net10.0\appsettings.Development.json
 D:\github\CampusFind-Lost-Found-Portal\backend\bin\Debug\net10.0\appsettings.json
 D:\github\CampusFind-Lost-Found-Portal\backend\bin\Debug\net10.0\backend.staticwebassets.endpoints.json
@@ -22,7 +31,6 @@ D:\github\CampusFind-Lost-Found-Portal\backend\bin\Debug\net10.0\Microsoft.CodeA
 D:\github\CampusFind-Lost-Found-Portal\backend\bin\Debug\net10.0\Microsoft.EntityFrameworkCore.dll
 D:\github\CampusFind-Lost-Found-Portal\backend\bin\Debug\net10.0\Microsoft.EntityFrameworkCore.Abstractions.dll
 D:\github\CampusFind-Lost-Found-Portal\backend\bin\Debug\net10.0\Microsoft.EntityFrameworkCore.Design.dll
-D:\github\CampusFind-Lost-Found-Portal\backend\bin\Debug\net10.0\Microsoft.EntityFrameworkCore.InMemory.dll
 D:\github\CampusFind-Lost-Found-Portal\backend\bin\Debug\net10.0\Microsoft.EntityFrameworkCore.Relational.dll
 D:\github\CampusFind-Lost-Found-Portal\backend\bin\Debug\net10.0\Microsoft.Extensions.DependencyModel.dll
 D:\github\CampusFind-Lost-Found-Portal\backend\bin\Debug\net10.0\Microsoft.IdentityModel.Abstractions.dll
@@ -112,15 +120,6 @@ D:\github\CampusFind-Lost-Found-Portal\backend\bin\Debug\net10.0\ru\Microsoft.Co
 D:\github\CampusFind-Lost-Found-Portal\backend\bin\Debug\net10.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 D:\github\CampusFind-Lost-Found-Portal\backend\bin\Debug\net10.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 D:\github\CampusFind-Lost-Found-Portal\backend\bin\Debug\net10.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
-D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\backend.csproj.AssemblyReference.cache
-D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\rpswa.dswa.cache.json
-D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\backend.GeneratedMSBuildEditorConfig.editorconfig
-D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\backend.AssemblyInfoInputs.cache
-D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\backend.AssemblyInfo.cs
-D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\backend.csproj.CoreCompileInputs.cache
-D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\backend.MvcApplicationPartsAssemblyInfo.cs
-D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\backend.MvcApplicationPartsAssemblyInfo.cache
-D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\backend.sourcelink.json
 D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\rjimswa.dswa.cache.json
 D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
 D:\github\CampusFind-Lost-Found-Portal\backend\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json

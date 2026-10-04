@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { ItemProvider } from './context/ItemContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -23,6 +23,23 @@ function ScrollToTop() {
   return null;
 }
 
+/** Redirects unauthenticated users to /login, preserving the intended destination. */
+function ProtectedRoute({ children }) {
+  const { user, isLoading } = useAuth();
+  const location = useLocation();
+
+  if (isLoading) {
+    // While restoring session from a saved token, show nothing (or a spinner)
+    return null;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
+}
+
 export default function App() {
   return (
     <AuthProvider>
@@ -33,14 +50,17 @@ export default function App() {
           
           <main className="flex-1">
             <Routes>
+              {/* Public routes */}
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/lost-items" element={<LostItems />} />
               <Route path="/found-items" element={<FoundItems />} />
-              <Route path="/report-lost" element={<ReportLost />} />
-              <Route path="/report-found" element={<ReportFound />} />
-              <Route path="/profile" element={<Profile />} />
+
+              {/* Protected routes — require authentication */}
+              <Route path="/report-lost" element={<ProtectedRoute><ReportLost /></ProtectedRoute>} />
+              <Route path="/report-found" element={<ProtectedRoute><ReportFound /></ProtectedRoute>} />
+              <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             </Routes>
           </main>
 
@@ -50,4 +70,4 @@ export default function App() {
       </ItemProvider>
     </AuthProvider>
   );
-}
+}

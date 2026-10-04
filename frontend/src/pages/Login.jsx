@@ -1,25 +1,29 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { ArrowUpRight, ShieldCheck, UserCheck, Key, Lock, ArrowRight } from 'lucide-react';
+import { ArrowUpRight, ShieldCheck } from 'lucide-react';
 import PixelBanner from '../components/PixelBanner';
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login, quickDemoLogin } = useAuth();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    login(email, password);
-    navigate('/profile');
-  };
-
-  const handleDemo = (role) => {
-    quickDemoLogin(role);
-    navigate('/profile');
+    setError('');
+    setIsSubmitting(true);
+    const result = await login(email, password);
+    setIsSubmitting(false);
+    if (result?.success) {
+      navigate('/');
+    } else {
+      setError(result?.error || 'Login failed. Please check your credentials.');
+    }
   };
 
   return (
@@ -36,39 +40,6 @@ export default function Login() {
           <p className="text-xs font-mono text-[#59636e]">
             CENTRAL UNIVERSITY IDENTITY & RECOVERY SYSTEM
           </p>
-        </div>
-
-        {/* 1-Click Quick Demo Login Box */}
-        <div className="border border-[#d0d7de] bg-white p-4 space-y-2.5">
-          <div className="flex items-center justify-between font-mono text-xs text-[#59636e] pb-1 border-b border-[#eaeef2]">
-            <span>QUICK DEMO ACCESS</span>
-            <span className="text-[#238636] font-semibold">1-CLICK</span>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => handleDemo('Student')}
-              className="p-2.5 text-left border border-[#d0d7de] hover:border-black bg-[#f6f8fa] hover:bg-white transition-all group"
-            >
-              <div className="text-xs font-bold text-[#1f2328] group-hover:text-[#0969da] flex items-center justify-between">
-                <span>Student</span>
-                <span className="font-mono text-[10px]">Alex R. ↗</span>
-              </div>
-              <div className="text-[10px] text-[#59636e] font-mono mt-0.5">STU-992026</div>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleDemo('Officer')}
-              className="p-2.5 text-left border border-[#d0d7de] hover:border-black bg-[#f6f8fa] hover:bg-white transition-all group"
-            >
-              <div className="text-xs font-bold text-[#1f2328] group-hover:text-[#238636] flex items-center justify-between">
-                <span>Security</span>
-                <span className="font-mono text-[10px]">Officer D. ↗</span>
-              </div>
-              <div className="text-[10px] text-[#59636e] font-mono mt-0.5">STAFF-SEC-04</div>
-            </button>
-          </div>
         </div>
 
         {/* Standard Form */}
@@ -93,7 +64,7 @@ export default function Login() {
                 <label className="block text-xs font-mono font-medium text-[#1f2328]">
                   PASSWORD
                 </label>
-                <a href="#reset" onClick={(e) => { e.preventDefault(); alert('Demo mode: Click "Quick Demo Access" above or enter any password.'); }} className="text-xs text-[#0969da] hover:underline font-mono">
+                <a href="#reset" onClick={(e) => e.preventDefault()} className="text-xs text-[#0969da] hover:underline font-mono">
                   Forgot?
                 </a>
               </div>
@@ -107,12 +78,19 @@ export default function Login() {
               />
             </div>
 
+            {error && (
+              <div className="px-3 py-2.5 bg-[#ffebe9] border border-[#ffc1ba] text-[#cf222e] text-xs font-mono">
+                {error}
+              </div>
+            )}
+
             <button
               type="submit"
-              className="w-full py-3 bg-[#238636] hover:bg-[#2ea44f] text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all mt-2"
+              disabled={isSubmitting}
+              className="w-full py-3 bg-[#238636] hover:bg-[#2ea44f] disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all mt-2"
             >
-              <span>Sign In with University ID</span>
-              <ArrowUpRight className="w-4 h-4" />
+              <span>{isSubmitting ? 'Signing in…' : 'Sign In with University ID'}</span>
+              {!isSubmitting && <ArrowUpRight className="w-4 h-4" />}
             </button>
           </form>
 
