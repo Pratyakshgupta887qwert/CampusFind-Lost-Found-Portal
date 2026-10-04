@@ -3,9 +3,20 @@
 > A centralized campus Lost & Found platform that helps students and faculty report, search, match, and claim lost items.
 
 [![Repository](https://img.shields.io/badge/GitHub-CampusFind-181717?logo=github)](https://github.com/Pratyakshgupta887qwert/CampusFind-Lost-Found-Portal)
+[![PRD](https://img.shields.io/badge/PRD-CampusFind-4285F4?logo=readthedocs&logoColor=white)](https://gist.github.com/Pratyakshgupta887qwert/7749c9b13acb01637be61ba3693b3b73)
 
-> [📄 If you want to read the PRD, click here for details](https://gist.github.com/Pratyakshgupta887qwert/7749c9b13acb01637be61ba3693b3b73)  
-> [📌 Project information, click here](https://gist.github.com/Pratyakshgupta887qwert/7749c9b13acb01637be61ba3693b3b73)
+![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&logoColor=white)
+![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core-512BD4?logo=dotnet&logoColor=white)
+![C#](https://img.shields.io/badge/C%23-239120?logo=csharp&logoColor=white)
+![.NET 10](https://img.shields.io/badge/.NET_10-512BD4?logo=dotnet&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
+![Entity Framework Core](https://img.shields.io/badge/EF_Core-512BD4?logo=dotnet&logoColor=white)
+![SignalR](https://img.shields.io/badge/SignalR-512BD4?logo=dotnet&logoColor=white)
+![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?logo=cloudinary&logoColor=white)
+![Swagger](https://img.shields.io/badge/Swagger-85EA2D?logo=swagger&logoColor=black)
 
 ## Overview
 
