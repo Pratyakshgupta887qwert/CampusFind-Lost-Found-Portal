@@ -4,13 +4,16 @@
 
 [![Repository](https://img.shields.io/badge/GitHub-CampusFind-181717?logo=github)](https://github.com/Pratyakshgupta887qwert/CampusFind-Lost-Found-Portal)
 
+> [📄 If you want to read the PRD, click here for details](https://gist.github.com/Pratyakshgupta887qwert/7749c9b13acb01637be61ba3693b3b73)  
+> [📌 Project information, click here](https://gist.github.com/Pratyakshgupta887qwert/7749c9b13acb01637be61ba3693b3b73)
+
 ## Overview
 
 CampusFind is a full-stack web application designed to simplify the process of reporting and recovering lost belongings on a college or university campus.
 
-The platform replaces fragmented communication through WhatsApp groups, Telegram groups, social media, notice boards, and word-of-mouth communication with a centralized digital system. Users can report lost items, report found items, browse available listings, upload images, receive notifications, and manage their reports.
+The platform replaces fragmented communication through WhatsApp groups, Telegram groups, social media, notice boards, and word-of-mouth communication with a centralized digital system. Users can report lost items, search for found items, and connect with the right owners through a structured claim process.
 
-The application is built with a React and Vite frontend and an ASP.NET Core Web API backend. It uses PostgreSQL for data storage, Entity Framework Core for database access, JWT for authentication, SignalR for real-time notifications, and Cloudinary for image management.
+The application is built with a React and Vite frontend and an ASP.NET Core Web API backend. It uses PostgreSQL for data storage, Entity Framework Core for database access, JWT for authentication, and SignalR for real-time notifications.
 
 ---
 
@@ -159,10 +162,10 @@ Protected routes require an authenticated user. Unauthenticated users are redire
 │        React Frontend       │
 │          Vite + JS          │
 └──────────────┬──────────────┘
-               │
-               │ HTTP REST API
-               │ SignalR
-               ▼
+                │
+                │ HTTP REST API
+                │ SignalR
+                ▼
 ┌─────────────────────────────┐
 │      ASP.NET Core API       │
 │            C#               │
@@ -174,20 +177,20 @@ Protected routes require an authenticated user. Unauthenticated users are redire
 │ Helpers                     │
 │ SignalR Hubs                │
 └──────────────┬──────────────┘
-               │
-               ▼
+                │
+                ▼
 ┌─────────────────────────────┐
 │ Entity Framework Core       │
 │          Npgsql             │
 └──────────────┬──────────────┘
-               │
-               ▼
+                │
+                ▼
 ┌─────────────────────────────┐
 │ PostgreSQL / Neon Database  │
 └─────────────────────────────┘
 
-               │
-               ▼
+                │
+                ▼
 ┌─────────────────────────────┐
 │ Cloudinary Image Storage    │
 └─────────────────────────────┘
@@ -843,6 +846,4 @@ If this project is intended for public distribution, add an appropriate open-sou
 
 CampusFind is a full-stack campus Lost & Found platform that provides a structured way for students and faculty to report, search, match, claim, and recover lost belongings.
 
-The project combines a React and Vite frontend with an ASP.NET Core Web API backend. It uses PostgreSQL and Entity Framework Core for persistence, JWT for secure authentication, SignalR for real-time notifications, Cloudinary for image storage, and Swagger for API documentation.
-
-The modular architecture provides a strong foundation for future features such as AI-powered matching, image recognition, advanced analytics, mobile applications, and multi-campus support.
+The project combines a React and Vite frontend with an ASP.NET Core Web API backend. It uses PostgreSQL and Entity Framework Core for persistence, JWT for secure authentication, SignalR for real-time notifications, and Cloudinary for image management. The modular architecture provides a strong foundation for future features such as AI-powered matching, image recognition, advanced analytics, mobile applications, and multi-campus support.
