@@ -1,4 +1,3 @@
-using backend.DTOs.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -10,6 +9,9 @@ public class TestController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        return Ok(ApiResponse.SuccessResult("CampusFind API is running 🚀 System Operational"));
+        return Ok(new
+        {
+            message = "CampusFind API is running 🚀"
+        });
     }
 }
