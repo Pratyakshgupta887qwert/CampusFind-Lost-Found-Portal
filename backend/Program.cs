@@ -1,9 +1,9 @@
 using System.Text;
+
 using backend.Data;
 using backend.Helpers;
 using backend.Hubs;
 using backend.Middleware;
-using backend.Models;
 using backend.Services;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,6 +12,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONTROLLERS
+// ─────────────────────────────────────────────────────────────────────────────
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -23,30 +27,52 @@ builder.Services.AddControllers()
             System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 
-// ─── DATABASE ─────────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DATABASE — NEON POSTGRESQL
+// ─────────────────────────────────────────────────────────────────────────────
+
 var connectionString =
     builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? Environment.GetEnvironmentVariable("DATABASE_URL");
+    ?? Environment.GetEnvironmentVariable("DATABASE_URL")
+    ?? throw new InvalidOperationException(
+        "Database connection string is not configured. " +
+        "Set ConnectionStrings:DefaultConnection using .NET User Secrets " +
+        "or set the DATABASE_URL environment variable.");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseNpgsql(connectionString, npgsqlOptions =>
-    {
-        npgsqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 3,
-            maxRetryDelay: TimeSpan.FromSeconds(5),
-            errorCodesToAdd: null);
-    });
+    options.UseNpgsql(
+        connectionString,
+        npgsqlOptions =>
+        {
+            npgsqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 3,
+                maxRetryDelay: TimeSpan.FromSeconds(5),
+                errorCodesToAdd: null);
+        });
 });
 
-// JWT
+
+// ─────────────────────────────────────────────────────────────────────────────
+// JWT AUTHENTICATION
+// ─────────────────────────────────────────────────────────────────────────────
+
 var jwtSecret =
     builder.Configuration["Jwt:SecretKey"]
     ?? Environment.GetEnvironmentVariable("JWT_SECRET")
-    ?? "CampusFind_Super_Secure_JWT_Secret_Key_2026_Campus_Portal_Key_12345!";
+    ?? throw new InvalidOperationException(
+        "JWT secret is not configured. " +
+        "Set Jwt:SecretKey using .NET User Secrets " +
+        "or set the JWT_SECRET environment variable.");
 
-var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "CampusFindApi";
-var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "CampusFindClient";
+var jwtIssuer =
+    builder.Configuration["Jwt:Issuer"]
+    ?? "CampusFindApi";
+
+var jwtAudience =
+    builder.Configuration["Jwt:Audience"]
+    ?? "CampusFindClient";
 
 builder.Services.AddAuthentication(options =>
 {
@@ -61,43 +87,88 @@ builder.Services.AddAuthentication(options =>
     options.RequireHttpsMetadata = false;
     options.SaveToken = true;
 
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
+    options.TokenValidationParameters =
+        new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
 
-        IssuerSigningKey =
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
+            IssuerSigningKey =
+                new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(jwtSecret)),
 
-        ValidateIssuer = true,
-        ValidIssuer = jwtIssuer,
+            ValidateIssuer = true,
+            ValidIssuer = jwtIssuer,
 
-        ValidateAudience = true,
-        ValidAudience = jwtAudience,
+            ValidateAudience = true,
+            ValidAudience = jwtAudience,
 
-        ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero
-    };
+            ValidateLifetime = true,
+
+            ClockSkew = TimeSpan.Zero
+        };
 });
 
 builder.Services.AddAuthorization();
 
+
+// ─────────────────────────────────────────────────────────────────────────────
 // SIGNALR
+// ─────────────────────────────────────────────────────────────────────────────
+
 builder.Services.AddSignalR();
 
-// SERVICES
-builder.Services.AddSingleton<JwtHelper>();
-builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
-builder.Services.AddScoped<INotificationService, NotificationService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ILostItemService, LostItemService>();
-builder.Services.AddScoped<IFoundItemService, FoundItemService>();
-builder.Services.AddScoped<IMatchingService, MatchingService>();
-builder.Services.AddScoped<IClaimService, ClaimService>();
-builder.Services.AddScoped<IReportService, ReportService>();
-builder.Services.AddScoped<IDashboardService, DashboardService>();
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SERVICES
+// ─────────────────────────────────────────────────────────────────────────────
+
+builder.Services.AddSingleton<JwtHelper>();
+
+builder.Services.AddScoped<
+    ICloudinaryService,
+    CloudinaryService>();
+
+builder.Services.AddScoped<
+    INotificationService,
+    NotificationService>();
+
+builder.Services.AddScoped<
+    IAuthService,
+    AuthService>();
+
+builder.Services.AddScoped<
+    IUserService,
+    UserService>();
+
+builder.Services.AddScoped<
+    ILostItemService,
+    LostItemService>();
+
+builder.Services.AddScoped<
+    IFoundItemService,
+    FoundItemService>();
+
+builder.Services.AddScoped<
+    IMatchingService,
+    MatchingService>();
+
+builder.Services.AddScoped<
+    IClaimService,
+    ClaimService>();
+
+builder.Services.AddScoped<
+    IReportService,
+    ReportService>();
+
+builder.Services.AddScoped<
+    IDashboardService,
+    DashboardService>();
+
+
+// ─────────────────────────────────────────────────────────────────────────────
 // CORS
+// ─────────────────────────────────────────────────────────────────────────────
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
@@ -114,30 +185,50 @@ builder.Services.AddCors(options =>
     });
 });
 
+
+// ─────────────────────────────────────────────────────────────────────────────
 // SWAGGER
+// ─────────────────────────────────────────────────────────────────────────────
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "CampusFind API — Lost & Found Portal",
-        Version = "v1",
-        Description =
-            "Centralized campus recovery platform with JWT authentication, Cloudinary storage, SignalR, and automated matching."
-    });
+    c.SwaggerDoc(
+        "v1",
+        new OpenApiInfo
+        {
+            Title =
+                "CampusFind API — Lost & Found Portal",
 
-    var securityScheme = new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Description = "JWT Authorization header using the Bearer scheme.",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,
-        Scheme = "Bearer",
-        BearerFormat = "JWT"
-    };
+            Version = "v1",
 
-    c.AddSecurityDefinition("Bearer", securityScheme);
+            Description =
+                "Centralized campus recovery platform with " +
+                "JWT authentication, Cloudinary storage, " +
+                "SignalR, and automated matching."
+        });
+
+    var securityScheme =
+        new OpenApiSecurityScheme
+        {
+            Name = "Authorization",
+
+            Description =
+                "JWT Authorization header using the Bearer scheme.",
+
+            In = ParameterLocation.Header,
+
+            Type = SecuritySchemeType.Http,
+
+            Scheme = "Bearer",
+
+            BearerFormat = "JWT"
+        };
+
+    c.AddSecurityDefinition(
+        "Bearer",
+        securityScheme);
 
     c.AddSecurityRequirement(doc =>
         new OpenApiSecurityRequirement
@@ -149,9 +240,24 @@ builder.Services.AddSwaggerGen(c =>
         });
 });
 
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BUILD APPLICATION
+// ─────────────────────────────────────────────────────────────────────────────
+
 var app = builder.Build();
 
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EXCEPTION MIDDLEWARE
+// ─────────────────────────────────────────────────────────────────────────────
+
 app.UseMiddleware<ExceptionMiddleware>();
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SWAGGER
+// ─────────────────────────────────────────────────────────────────────────────
 
 if (app.Environment.IsDevelopment())
 {
@@ -167,43 +273,79 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HTTP PIPELINE
+// ─────────────────────────────────────────────────────────────────────────────
+
 app.UseRouting();
 
 app.UseCors("Frontend");
 
 app.UseAuthentication();
+
 app.UseAuthorization();
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONTROLLERS
+// ─────────────────────────────────────────────────────────────────────────────
 
 app.MapControllers();
 
-app.MapHub<NotificationHub>("/hubs/notifications");
 
-// ─── DATABASE INIT & MIGRATIONS ───────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// SIGNALR HUB
+// ─────────────────────────────────────────────────────────────────────────────
+
+app.MapHub<NotificationHub>(
+    "/hubs/notifications");
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DATABASE INITIALIZATION & MIGRATIONS
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DATABASE INIT & MIGRATIONS
+// ─────────────────────────────────────────────────────────────────────────────
+
 using (var scope = app.Services.CreateScope())
 {
-    var logger    = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var logger =
+        scope.ServiceProvider
+            .GetRequiredService<ILogger<Program>>();
+
+    var dbContext =
+        scope.ServiceProvider
+            .GetRequiredService<AppDbContext>();
 
     try
     {
-        logger.LogInformation("🔄 Connecting to Neon PostgreSQL...");
-        var canConnect = await dbContext.Database.CanConnectAsync();
+        logger.LogInformation(
+            "🔄 Connecting to Neon PostgreSQL...");
 
-        if (canConnect)
-        {
-            logger.LogInformation("✅ PostgreSQL connected successfully!");
-            await dbContext.Database.MigrateAsync();
-            logger.LogInformation("✅ Migrations applied.");
-        }
-        else
-        {
-            logger.LogError("❌ PostgreSQL connection FAILED — check your connection string.");
-        }
+        await dbContext.Database.OpenConnectionAsync();
+
+        logger.LogInformation(
+            "✅ PostgreSQL connection OPENED successfully!");
+
+        await dbContext.Database.CloseConnectionAsync();
+
+        logger.LogInformation(
+            "🔄 Applying EF Core migrations...");
+
+        await dbContext.Database.MigrateAsync();
+
+        logger.LogInformation(
+            "✅ PostgreSQL migrations applied successfully!");
     }
     catch (Exception ex)
     {
-        logger.LogError(ex, "❌ Database initialization error: {Message}", ex.Message);
+        logger.LogError(
+            ex,
+            "❌ PostgreSQL ERROR: {Message}",
+            ex.Message);
     }
 }
-
 app.Run();
