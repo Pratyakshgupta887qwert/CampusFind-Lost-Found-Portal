@@ -22,6 +22,7 @@ export default function Navbar() {
     { label: 'Overview', path: '/' },
     { label: 'Lost Items', path: '/lost-items' },
     { label: 'Found Items', path: '/found-items' },
+    ...(user ? [{ label: 'My Posts', path: '/profile' }] : [])
   ];
 
   const handleReportItem = () => {

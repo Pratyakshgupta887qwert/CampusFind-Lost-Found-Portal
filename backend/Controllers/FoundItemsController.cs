@@ -51,8 +51,6 @@ public class FoundItemsController : ControllerBase
         var userId = User.GetUserId();
         var created = await _foundItemService.CreateFoundItemAsync(dto, userId, null);
 
-        _ = _matchingService.CheckAndNotifyMatchesForFoundItemAsync(created.Id);
-
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, ApiResponse<FoundItemResponseDto>.SuccessResult(created, "Found item logged successfully"));
     }
 
@@ -68,8 +66,6 @@ public class FoundItemsController : ControllerBase
 
         var userId = User.GetUserId();
         var created = await _foundItemService.CreateFoundItemAsync(dto, userId, images);
-
-        _ = _matchingService.CheckAndNotifyMatchesForFoundItemAsync(created.Id);
 
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, ApiResponse<FoundItemResponseDto>.SuccessResult(created, "Found item logged successfully"));
     }

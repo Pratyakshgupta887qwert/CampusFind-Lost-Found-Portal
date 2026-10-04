@@ -46,17 +46,19 @@ export default function LostItems() {
   const filteredItems = useMemo(() => {
     return lostItems
       .filter((item) => {
+        if (item.status === 'Recovered' || item.status === 'Closed') return false;
+
         const matchesSearch = 
-          item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          item.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          item.referenceCode.toLowerCase().includes(searchQuery.toLowerCase());
+          item.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.location?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (item.referenceCode || '').toLowerCase().includes(searchQuery.toLowerCase());
 
         const matchesCategory = 
           selectedCategory === 'All' || item.category === selectedCategory;
 
         const matchesLocation = 
-          selectedLocation === 'All' || item.location.toLowerCase().includes(selectedLocation.toLowerCase());
+          selectedLocation === 'All' || item.location?.toLowerCase().includes(selectedLocation.toLowerCase());
 
         return matchesSearch && matchesCategory && matchesLocation;
       })

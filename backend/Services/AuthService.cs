@@ -32,13 +32,11 @@ public class AuthService : IAuthService
             throw new InvalidOperationException("An account with this email already exists.");
         }
 
-        var passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
-
         var user = new User
         {
             FullName = dto.FullName.Trim(),
             Email = normalizedEmail,
-            PasswordHash = passwordHash,
+            PasswordHash = dto.Password,
             PhoneNumber = dto.PhoneNumber?.Trim(),
             StudentOrStaffId = dto.StudentOrStaffId?.Trim(),
             Department = dto.Department?.Trim(),
@@ -71,7 +69,26 @@ public class AuthService : IAuthService
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail);
 
-        if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+        if (user == null)
+        {
+            _logger.LogWarning("Failed login attempt for email: {Email}", dto.Email);
+            throw new UnauthorizedAccessException("Invalid email or password.");
+        }
+
+        bool passwordMatches = user.PasswordHash == dto.Password;
+        if (!passwordMatches)
+        {
+            try
+            {
+                passwordMatches = BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash);
+            }
+            catch
+            {
+                passwordMatches = false;
+            }
+        }
+
+        if (!passwordMatches)
         {
             _logger.LogWarning("Failed login attempt for email: {Email}", dto.Email);
             throw new UnauthorizedAccessException("Invalid email or password.");

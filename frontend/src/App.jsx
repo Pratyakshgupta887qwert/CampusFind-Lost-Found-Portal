@@ -61,6 +61,7 @@ export default function App() {
               <Route path="/report-lost" element={<ProtectedRoute><ReportLost /></ProtectedRoute>} />
               <Route path="/report-found" element={<ProtectedRoute><ReportFound /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="/my-posts" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             </Routes>
           </main>
 

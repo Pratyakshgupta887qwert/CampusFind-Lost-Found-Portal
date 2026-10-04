@@ -43,23 +43,35 @@ export default function ReportFound() {
     { label: 'Smart Device', url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80' }
   ];
 
-  const handleSubmit = (e) => {
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage('');
 
     if (!formData.title || !formData.description) {
-      alert('Please fill out the item title and description.');
+      setErrorMessage('Please fill out the item title and description.');
       return;
     }
 
     const finalImage = imagePreview || formData.image || 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80';
 
-    const created = addFoundItem({
-      ...formData,
-      image: finalImage
-    });
+    try {
+      setSubmitting(true);
+      const created = await addFoundItem({
+        ...formData,
+        image: finalImage
+      });
 
-    notify(`Found property logged into custody registry: ${created.referenceCode}`);
-    navigate('/found-items');
+      notify(`Found property logged into custody registry: ${created.referenceCode}`);
+      navigate('/found-items');
+    } catch (err) {
+      const msg = err?.response?.data?.message || err?.message || 'Failed to submit found item. Please try again.';
+      setErrorMessage(msg);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -311,6 +323,13 @@ export default function ReportFound() {
               </div>
             </div>
 
+            {/* Error Message */}
+            {errorMessage && (
+              <div className="p-4 bg-[#ffebe9] border border-[#ff8182] text-[#cf222e] text-xs font-mono">
+                ⚠️ {errorMessage}
+              </div>
+            )}
+
             {/* Submit Footer */}
             <div className="p-6 md:p-8 bg-[#f6f8fa] flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="text-xs text-[#59636e] font-mono">
@@ -318,9 +337,10 @@ export default function ReportFound() {
               </div>
               <button
                 type="submit"
-                className="w-full sm:w-auto px-8 py-3.5 bg-[#238636] hover:bg-[#2ea44f] text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-xs"
+                disabled={submitting}
+                className="w-full sm:w-auto px-8 py-3.5 bg-[#238636] hover:bg-[#2ea44f] disabled:opacity-60 text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-xs"
               >
-                <span>Register Found Property</span>
+                <span>{submitting ? 'Registering Property...' : 'Register Found Property'}</span>
                 <ArrowUpRight className="w-4 h-4" />
               </button>
             </div>

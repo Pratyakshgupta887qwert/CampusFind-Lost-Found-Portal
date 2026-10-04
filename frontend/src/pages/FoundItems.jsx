@@ -41,18 +41,20 @@ export default function FoundItems() {
 
   const filteredItems = useMemo(() => {
     return foundItems.filter((item) => {
+      if (item.status === 'Returned' || item.status === 'Closed') return false;
+
       const matchesSearch =
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.custodyLocation.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.referenceCode.toLowerCase().includes(searchQuery.toLowerCase());
+        item.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.location?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.custodyLocation?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (item.referenceCode || '').toLowerCase().includes(searchQuery.toLowerCase());
 
       const matchesCategory =
         selectedCategory === 'All' || item.category === selectedCategory;
 
       const matchesCustody =
-        selectedCustody === 'All' || item.custodyLocation.toLowerCase().includes(selectedCustody.toLowerCase());
+        selectedCustody === 'All' || item.custodyLocation?.toLowerCase().includes(selectedCustody.toLowerCase());
 
       return matchesSearch && matchesCategory && matchesCustody;
     });

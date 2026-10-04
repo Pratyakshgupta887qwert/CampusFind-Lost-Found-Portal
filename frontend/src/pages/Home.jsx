@@ -242,63 +242,69 @@ export default function Home() {
 
           {/* Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {lostItems.slice(0, 3).map((item) => (
-              <div
-                key={item.id}
-                className="border border-[#d0d7de] bg-white flex flex-col justify-between hover:border-black transition-all group"
-              >
-                <div>
-                  <div className="relative aspect-16/9 overflow-hidden bg-[#f6f8fa] border-b border-[#d0d7de]">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-3 left-3 flex gap-2">
-                      <span className="font-mono text-[11px] font-bold uppercase px-2 py-0.5 bg-black text-white">
-                        LOST ITEM
-                      </span>
-                      {item.reward && (
-                        <span className="font-mono text-[11px] font-bold px-2 py-0.5 bg-[#dafbe1] text-[#1a7f37] border border-[#4ac26b]">
-                          {item.reward}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="p-5 space-y-3">
-                    <div className="flex items-center justify-between font-mono text-[11px] text-[#59636e]">
-                      <span className="text-[#0969da] uppercase font-semibold">{item.category}</span>
-                      <span>{item.date}</span>
-                    </div>
-
-                    <h3 className="font-bold text-lg text-[#1f2328] group-hover:text-[#0969da] transition-colors line-clamp-1">
-                      {item.title}
-                    </h3>
-
-                    <p className="text-xs text-[#59636e] line-clamp-2 leading-relaxed">
-                      {item.description}
-                    </p>
-
-                    <div className="flex items-center gap-1.5 text-xs text-[#59636e] font-mono">
-                      <MapPin className="w-3.5 h-3.5 text-[#cf222e] shrink-0" />
-                      <span className="truncate">{item.location}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border-t border-[#d0d7de] p-4 bg-[#f6f8fa] flex items-center justify-between">
-                  <span className="font-mono text-xs text-[#59636e]">{item.referenceCode}</span>
-                  <button
-                    onClick={() => { setSelectedItem(item); setSelectedType('lost'); }}
-                    className="font-mono text-xs font-semibold text-[#1f2328] hover:text-[#0969da] flex items-center gap-1"
-                  >
-                    <span>I Found This</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+            {lostItems.length === 0 ? (
+              <div className="p-8 border border-[#d0d7de] bg-[#f6f8fa] text-center text-sm text-[#59636e] col-span-full font-mono">
+                No active lost items reported on campus.
               </div>
-            ))}
+            ) : (
+              lostItems.slice(0, 3).map((item) => (
+                <div
+                  key={item.id}
+                  className="border border-[#d0d7de] bg-white flex flex-col justify-between hover:border-black transition-all group"
+                >
+                  <div>
+                    <div className="relative aspect-16/9 overflow-hidden bg-[#f6f8fa] border-b border-[#d0d7de]">
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute top-3 left-3 flex gap-2">
+                        <span className="font-mono text-[11px] font-bold uppercase px-2 py-0.5 bg-black text-white">
+                          LOST ITEM
+                        </span>
+                        {item.reward && (
+                          <span className="font-mono text-[11px] font-bold px-2 py-0.5 bg-[#dafbe1] text-[#1a7f37] border border-[#4ac26b]">
+                            {item.reward}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="p-5 space-y-3">
+                      <div className="flex items-center justify-between font-mono text-[11px] text-[#59636e]">
+                        <span className="text-[#0969da] uppercase font-semibold">{item.category}</span>
+                        <span>{item.date}</span>
+                      </div>
+
+                      <h3 className="font-bold text-lg text-[#1f2328] group-hover:text-[#0969da] transition-colors line-clamp-1">
+                        {item.title}
+                      </h3>
+
+                      <p className="text-xs text-[#59636e] line-clamp-2 leading-relaxed">
+                        {item.description}
+                      </p>
+
+                      <div className="flex items-center gap-1.5 text-xs text-[#59636e] font-mono">
+                        <MapPin className="w-3.5 h-3.5 text-[#cf222e] shrink-0" />
+                        <span className="truncate">{item.location}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-[#d0d7de] p-4 bg-[#f6f8fa] flex items-center justify-between">
+                    <span className="font-mono text-xs text-[#59636e]">{item.referenceCode}</span>
+                    <button
+                      onClick={() => { setSelectedItem(item); setSelectedType('lost'); }}
+                      className="font-mono text-xs font-semibold text-[#1f2328] hover:text-[#0969da] flex items-center gap-1"
+                    >
+                      <span>I Found This</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
 
           {/* Found Items Row preview */}
@@ -311,36 +317,42 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {foundItems.slice(0, 2).map((item) => (
-                <div
-                  key={item.id}
-                  className="border border-[#d0d7de] p-4 flex gap-4 items-center bg-[#f6f8fa] hover:bg-white transition-colors"
-                >
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-20 h-20 object-cover border border-[#d0d7de] shrink-0"
-                  />
-                  <div className="min-w-0 flex-1 space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-[10px] font-bold uppercase px-1.5 py-0.5 bg-[#238636] text-white">
-                        FOUND
-                      </span>
-                      <span className="font-mono text-[11px] text-[#59636e] truncate">
-                        Held at: {item.custodyLocation}
-                      </span>
-                    </div>
-                    <h4 className="font-bold text-sm text-[#1f2328] truncate">{item.title}</h4>
-                    <p className="text-xs text-[#59636e] line-clamp-1">{item.description}</p>
-                  </div>
-                  <button
-                    onClick={() => { setSelectedItem(item); setSelectedType('found'); }}
-                    className="px-3 py-2 bg-black hover:bg-[#238636] text-white text-xs font-mono font-semibold transition-colors shrink-0"
-                  >
-                    Claim ↗
-                  </button>
+              {foundItems.length === 0 ? (
+                <div className="p-6 border border-[#d0d7de] bg-[#f6f8fa] text-center text-sm text-[#59636e] col-span-full font-mono">
+                  No active found property in custody right now.
                 </div>
-              ))}
+              ) : (
+                foundItems.slice(0, 2).map((item) => (
+                  <div
+                    key={item.id}
+                    className="border border-[#d0d7de] p-4 flex gap-4 items-center bg-[#f6f8fa] hover:bg-white transition-colors"
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-20 h-20 object-cover border border-[#d0d7de] shrink-0"
+                    />
+                    <div className="min-w-0 flex-1 space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-[10px] font-bold uppercase px-1.5 py-0.5 bg-[#238636] text-white">
+                          FOUND
+                        </span>
+                        <span className="font-mono text-[11px] text-[#59636e] truncate">
+                          Held at: {item.custodyLocation}
+                        </span>
+                      </div>
+                      <h4 className="font-bold text-sm text-[#1f2328] truncate">{item.title}</h4>
+                      <p className="text-xs text-[#59636e] line-clamp-1">{item.description}</p>
+                    </div>
+                    <button
+                      onClick={() => { setSelectedItem(item); setSelectedType('found'); }}
+                      className="px-3 py-2 bg-black hover:bg-[#238636] text-white text-xs font-mono font-semibold transition-colors shrink-0"
+                    >
+                      Claim ↗
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
