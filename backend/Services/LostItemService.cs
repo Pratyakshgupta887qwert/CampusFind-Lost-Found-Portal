@@ -93,19 +93,6 @@ public class LostItemService : ILostItemService
         await _context.Entry(lostItem).Reference(i => i.User).LoadAsync();
         await _context.Entry(lostItem).Collection(i => i.Images).LoadAsync();
 
-        // Broadcast notification to all active campus users
-        _ = Task.Run(async () =>
-        {
-            try
-            {
-                await _notificationService.BroadcastNewLostItemAsync(lostItem);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to broadcast new lost item in background task");
-            }
-        });
-
         return MapToDto(lostItem);
     }
 
@@ -140,10 +127,14 @@ public class LostItemService : ILostItemService
             query = query.Where(i => i.Location.ToLower().Contains(queryParams.Location.Trim().ToLower()));
         }
 
-        // 4. Status filter
+        // 4. Status filter - exclude Recovered and Closed items from active website listings by default
         if (!string.IsNullOrWhiteSpace(queryParams.Status) && !queryParams.Status.Equals("All", StringComparison.OrdinalIgnoreCase))
         {
             query = query.Where(i => i.Status.ToLower() == queryParams.Status.Trim().ToLower());
+        }
+        else
+        {
+            query = query.Where(i => i.Status.ToLower() != "recovered" && i.Status.ToLower() != "closed");
         }
 
         // 5. Date range

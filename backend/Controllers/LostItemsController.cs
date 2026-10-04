@@ -50,9 +50,6 @@ public class LostItemsController : ControllerBase
 
         var userId = User.GetUserId();
         var created = await _lostItemService.CreateLostItemAsync(dto, userId, null);
-        
-        // Asynchronously check matches
-        _ = _matchingService.CheckAndNotifyMatchesForLostItemAsync(created.Id);
 
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, ApiResponse<LostItemResponseDto>.SuccessResult(created, "Lost item reported successfully"));
     }
@@ -69,8 +66,6 @@ public class LostItemsController : ControllerBase
 
         var userId = User.GetUserId();
         var created = await _lostItemService.CreateLostItemAsync(dto, userId, images);
-
-        _ = _matchingService.CheckAndNotifyMatchesForLostItemAsync(created.Id);
 
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, ApiResponse<LostItemResponseDto>.SuccessResult(created, "Lost item reported successfully"));
     }

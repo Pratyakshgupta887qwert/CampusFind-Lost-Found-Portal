@@ -78,9 +78,9 @@
               "target": "Package",
               "version": "[10.0.12, )"
             },
-            "Microsoft.EntityFrameworkCore.InMemory": {
+            "Microsoft.OpenApi": {
               "target": "Package",
-              "version": "[10.0.12, )"
+              "version": "[2.12.0, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",

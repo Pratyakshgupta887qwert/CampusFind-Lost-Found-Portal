@@ -21,7 +21,7 @@ import PixelBanner from '../components/PixelBanner';
 export default function Profile() {
   const navigate = useNavigate();
   const { user, logout, notify } = useAuth();
-  const { lostItems, foundItems, claims, resolveItem } = useItems();
+  const { myLostItems, myFoundItems, claims, resolveItem } = useItems();
 
   const [activeTab, setActiveTab] = useState('lost');
 
@@ -57,18 +57,13 @@ export default function Profile() {
     );
   }
 
-  // Filter items associated with current user or show relevant items
-  const myLostItems = lostItems.filter(
-    (item) => item.reporterId === user.id || item.reporterName === user.name
-  );
-
-  const myFoundItems = foundItems.filter(
-    (item) => item.finderName.includes(user.name.split(' ')[0]) || item.finderContact === user.email
-  );
-
-  const handleResolve = (itemId, type) => {
-    resolveItem(itemId, type);
-    notify(`Item status updated to Resolved! Great work.`);
+  const handleResolve = async (itemId, type) => {
+    try {
+      await resolveItem(itemId, type);
+      notify(type === 'lost' ? 'Item marked as Recovered!' : 'Item marked as Returned!');
+    } catch (err) {
+      notify('Failed to update status. Please try again.', 'error');
+    }
   };
 
   return (
@@ -263,7 +258,7 @@ export default function Profile() {
 
                       <div className="pt-3 border-t border-[#eaeef2] flex items-center justify-between text-xs font-mono">
                         <span className="text-[#59636e]">{item.referenceCode}</span>
-                        {item.status !== 'Resolved / Recovered' ? (
+                        {item.status !== 'Recovered' && item.status !== 'Resolved / Recovered' ? (
                           <button
                             onClick={() => handleResolve(item.id, 'lost')}
                             className="px-3 py-1.5 bg-[#dafbe1] text-[#1a7f37] border border-[#4ac26b] hover:bg-[#238636] hover:text-white transition-colors font-bold"
@@ -333,13 +328,15 @@ export default function Profile() {
 
                       <div className="pt-3 border-t border-[#eaeef2] flex items-center justify-between text-xs font-mono">
                         <span className="text-[#59636e]">{item.referenceCode}</span>
-                        {item.status !== 'Resolved / Handed Over' && (
+                        {item.status !== 'Returned' && item.status !== 'Resolved / Handed Over' ? (
                           <button
                             onClick={() => handleResolve(item.id, 'found')}
                             className="px-3 py-1.5 bg-black text-white hover:bg-[#238636] transition-colors"
                           >
-                            Mark Handed to Owner ✓
+                            Mark Returned ✓
                           </button>
+                        ) : (
+                          <span className="text-[#238636] font-bold">RETURNED & CLOSED</span>
                         )}
                       </div>
                     </div>

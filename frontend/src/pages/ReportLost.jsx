@@ -48,11 +48,15 @@ export default function ReportLost() {
     { label: 'Keys', url: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=600&q=80' }
   ];
 
-  const handleSubmit = (e) => {
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage('');
 
     if (!formData.title || !formData.description) {
-      alert('Please fill out the item title and description.');
+      setErrorMessage('Please fill out the item title and description.');
       return;
     }
 
@@ -61,15 +65,22 @@ export default function ReportLost() {
       ? `${formData.location} — ${formData.roomDetails}` 
       : formData.location;
 
-    const created = addLostItem({
-      ...formData,
-      image: finalImage,
-      location: finalLocation,
-      reporterId: user ? user.id : 'anon_guest'
-    });
+    try {
+      setSubmitting(true);
+      const created = await addLostItem({
+        ...formData,
+        image: finalImage,
+        location: finalLocation
+      });
 
-    notify(`Lost report logged! Tracking code: ${created.referenceCode}`);
-    navigate('/lost-items');
+      notify(`Lost report logged! Tracking code: ${created.referenceCode}`);
+      navigate('/lost-items');
+    } catch (err) {
+      const msg = err?.response?.data?.message || err?.message || 'Failed to submit report. Please try again.';
+      setErrorMessage(msg);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handlePresetImage = (url) => {
@@ -390,6 +401,13 @@ export default function ReportLost() {
               </div>
             </div>
 
+            {/* Error Message */}
+            {errorMessage && (
+              <div className="p-4 bg-[#ffebe9] border border-[#ff8182] text-[#cf222e] text-xs font-mono">
+                ⚠️ {errorMessage}
+              </div>
+            )}
+
             {/* Submit Bar */}
             <div className="p-6 md:p-8 bg-[#f6f8fa] flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="text-xs text-[#59636e] font-mono">
@@ -397,9 +415,10 @@ export default function ReportLost() {
               </div>
               <button
                 type="submit"
-                className="w-full sm:w-auto px-8 py-3.5 bg-[#238636] hover:bg-[#2ea44f] text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-xs"
+                disabled={submitting}
+                className="w-full sm:w-auto px-8 py-3.5 bg-[#238636] hover:bg-[#2ea44f] disabled:opacity-60 text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-xs"
               >
-                <span>Publish Lost Item Report</span>
+                <span>{submitting ? 'Publishing Report...' : 'Publish Lost Item Report'}</span>
                 <ArrowUpRight className="w-4 h-4" />
               </button>
             </div>

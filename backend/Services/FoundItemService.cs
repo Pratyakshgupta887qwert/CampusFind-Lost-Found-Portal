@@ -127,10 +127,14 @@ public class FoundItemService : IFoundItemService
             query = query.Where(i => i.Location.ToLower().Contains(queryParams.Location.Trim().ToLower()));
         }
 
-        // 4. Status filter
+        // 4. Status filter - exclude Returned and Closed items from active website listings by default
         if (!string.IsNullOrWhiteSpace(queryParams.Status) && !queryParams.Status.Equals("All", StringComparison.OrdinalIgnoreCase))
         {
             query = query.Where(i => i.Status.ToLower() == queryParams.Status.Trim().ToLower());
+        }
+        else
+        {
+            query = query.Where(i => i.Status.ToLower() != "returned" && i.Status.ToLower() != "closed");
         }
 
         // 5. Date range

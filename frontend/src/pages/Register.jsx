@@ -17,19 +17,28 @@ export default function Register() {
     role: 'Student',
     password: '',
     confirmPassword: '',
-    terms: true
+    terms: false
   });
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
     if (formData.password && formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match.');
+      setError('Passwords do not match.');
       return;
     }
 
-    register(formData);
-    navigate('/profile');
+    setIsSubmitting(true);
+    const result = await register(formData);
+    setIsSubmitting(false);
+    if (result?.success) {
+      navigate('/');
+    } else {
+      setError(result?.error || 'Registration failed. Please try again.');
+    }
   };
 
   return (
@@ -181,12 +190,19 @@ export default function Register() {
               </label>
             </div>
 
+            {error && (
+              <div className="px-3 py-2.5 bg-[#ffebe9] border border-[#ffc1ba] text-[#cf222e] text-xs font-mono">
+                {error}
+              </div>
+            )}
+
             <button
               type="submit"
-              className="w-full py-3 bg-[#238636] hover:bg-[#2ea44f] text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all mt-4"
+              disabled={isSubmitting}
+              className="w-full py-3 bg-[#238636] hover:bg-[#2ea44f] disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all mt-4"
             >
-              <span>Complete Campus Registration</span>
-              <ArrowUpRight className="w-4 h-4" />
+              <span>{isSubmitting ? 'Creating account…' : 'Complete Campus Registration'}</span>
+              {!isSubmitting && <ArrowUpRight className="w-4 h-4" />}
             </button>
           </form>
 
