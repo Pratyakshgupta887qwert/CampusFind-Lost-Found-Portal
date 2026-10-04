@@ -356,7 +356,7 @@ npm run dev
 The frontend will normally be available at:
 
 ```text
-http://localhost:5173
+https://campusfind-lost-found-portal.onrender.com
 ```
 
 ---
@@ -527,7 +527,7 @@ Swagger is enabled in the development environment.
 After starting the backend, open:
 
 ```text
-http://localhost:5024/swagger
+https://campusfind-lost-found-portal.onrender.com
 ```
 
 The Swagger documentation provides an interactive interface for testing the API.
@@ -848,7 +848,7 @@ If this project is intended for public distribution, add an appropriate open-sou
 ## Project Links
 
 - Repository: [CampusFind-Lost-Found-Portal](https://github.com/Pratyakshgupta887qwert/CampusFind-Lost-Found-Portal)
-- Swagger: `http://localhost:5024/swagger`
+- Swagger: `https://campusfind-lost-found-portal.onrender.com`
 - SignalR hub: `/hubs/notifications`
 
 ---
