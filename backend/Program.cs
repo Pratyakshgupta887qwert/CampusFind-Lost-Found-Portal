@@ -32,13 +32,25 @@ builder.Services.AddControllers()
 // DATABASE — NEON POSTGRESQL
 // ─────────────────────────────────────────────────────────────────────────────
 
+// var connectionString =
+//     builder.Configuration.GetConnectionString("DefaultConnection")
+//     ?? Environment.GetEnvironmentVariable("DATABASE_URL")
+//     ?? throw new InvalidOperationException(
+//         "Database connection string is not configured. " +
+//         "Set ConnectionStrings:DefaultConnection using .NET User Secrets " +
+//         "or set the DATABASE_URL environment variable.");
+
 var connectionString =
-    builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? Environment.GetEnvironmentVariable("DATABASE_URL")
-    ?? throw new InvalidOperationException(
+    Environment.GetEnvironmentVariable("DATABASE_URL")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
         "Database connection string is not configured. " +
         "Set ConnectionStrings:DefaultConnection using .NET User Secrets " +
         "or set the DATABASE_URL environment variable.");
+}
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
