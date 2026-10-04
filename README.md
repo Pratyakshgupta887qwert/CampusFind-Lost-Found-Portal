@@ -4,8 +4,7 @@
 
 [![Repository](https://img.shields.io/badge/GitHub-CampusFind-181717?logo=github)](https://github.com/Pratyakshgupta887qwert/CampusFind-Lost-Found-Portal)
 
-> [📄 If you want to read the PRD, click here for details](https://gist.github.com/Pratyakshgupta887qwert/7749c9b13acb01637be61ba3693b3b73)  
-> [📌 Project information, click here](https://gist.github.com/Pratyakshgupta887qwert/7749c9b13acb01637be61ba3693b3b73)
+<a href="https://gist.github.com/Pratyakshgupta887qwert/7749c9b13acb01637be61ba3693b3b73"><img src="https://img.shields.io/badge/PRD%20%26%20Project%20Details-Read%20More-2563EB?style=for-the-badge&logo=readme&logoColor=white"></a>
 
 ## Overview
 
